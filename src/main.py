@@ -2,7 +2,6 @@
 
 from pathlib import Path
 from typing import Optional
-from PyPDF2.merger import PdfFileMerger
 import typer
 from PyPDF2 import PdfFileMerger
 
@@ -11,7 +10,7 @@ app = typer.Typer()
 
 # pdf='~/Development/Python/Projects/pdf-jack/src/./main.py'
 @app.command()
-def merge(path: str, name: Optional[str] = None):
+def merge(path: str, name: Optional[str] = '', safe: Optional[bool] = False):
     path = Path(path)
     merger = PdfFileMerger()
     for document in path.iterdir():
@@ -19,7 +18,10 @@ def merge(path: str, name: Optional[str] = None):
             if document.name == 'merged.pdf':
                 continue
             merger.append(str(document))
-    filename = 'merged' if name == None else f'{name}_merged'
+    if name != '' and safe:
+        name = f'{name}_merged'
+        
+    filename = 'merged' if name == '' else name
     with open(f'{path}/{filename}.pdf', 'wb') as pdf:
        merger.write(pdf)
     
