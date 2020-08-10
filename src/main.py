@@ -9,7 +9,7 @@ from PyPDF2 import PdfFileMerger
 
 app = typer.Typer()
 
-
+#TODO: Tratamento de erros(FileNotFound, NotADirectoryError(Qnd passar um zip sem um --extract))
 @app.command()
 def merge(
     path: str,
@@ -32,15 +32,14 @@ def merge(
     """
     path = Path(path)
     merger = PdfFileMerger()
-    if extract and extract_to == "":
-        os.chdir(path.parent)
-        os.system(f"unzip {path}")
-        path = Path(str(path).replace(".zip", ""))
-    elif extract and extract_to != "":
-        os.chdir(extract_to)
-        os.system(f"unzip {path}")
-        path = Path(f'{extract_to}/{str(path.name).replace(".zip","")}')
-
+    if extract:
+        if extract_to == '':
+            os.chdir(path.parent)
+            os.system(f'unzip {path}')
+        else:
+            os.chdir(extract_to)
+            os.system(f'unzip {path}')
+        path = Path(str(path).replace(".zip","")) if extract_to == '' else Path(f'{extract_to}/{str(path.name).replace(".zip","")}')
     for document in path.iterdir():
         if document.is_file() and document.suffix == ".pdf":
             if "merged" in document.name:
