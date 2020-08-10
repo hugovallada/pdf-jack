@@ -26,7 +26,6 @@ def merge(
     path = Path(str(path).replace(".zip", ""))
     for document in path.iterdir():
         if document.is_file() and document.suffix == ".pdf":
-            # if document.name == "merged.pdf":
             if "merged" in document.name:
                 continue
             merger.append(str(document))

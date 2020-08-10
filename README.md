@@ -2,9 +2,15 @@
 
 ## Projeto CLI para trabalhar com pdfs de maneira optmizada, salvando tempo em relação a programas com interface gráfica
 
-## Funções do programa : 
-### merge : Junta todos os arquivos pdfs em um determinado diretório
-#### Args:
+## Instalação:
+    1. Clone o repositório: git clone git@github.com:hugovallada/pdf-jack.git
+    2. Entre no diretório do projeto (cd pdf-jack) e execute pip install -r requirements.txt
+    3. Adicionar um alias para o executável python: alias pdf='python main.py'
+
+## Utilização: 
+### merge : Junta todos os arquivos pdfs em um determinado diretório, ou arquivo zip, fazendo a extração para o diretório raiz
+### ex: pdf merge /home/user/trabalhos --name trabalhos --safe --manager
+#### Parâmetros da função merge:
     PATH (Obrigatório) : Passa a localização do diretório/arquivo zip
     --name (Opcional) - Default = '' : Passa o nome do arquivo gerado, caso não passe, o arquivo se chamará merged.pdf
     --safe (Opcional) - Default = False : Adiciona _merged ao fim do nome do arquivo, arquivos com _merged no nome, nunca são adicionados ao
