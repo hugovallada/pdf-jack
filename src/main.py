@@ -29,6 +29,9 @@ def merge(
         extract (Optional[bool], optional): Indica se é um arquivo zip a ser extraido. Defaults to False.
         extract_to (Optional[str], optional): Caminho do diretório onde deve ser extraido. Defaults to "".
         manager (Optional[bool], optional): Abrir o file manager. Defaults to False.
+
+    Raises:
+        FileNotFoundError: Se o caminho passado não existir, gera um erro para evitar que o comando unzip tente extrai-lo caso o --extract seja passado
     """
     try:
         path = Path(path)
