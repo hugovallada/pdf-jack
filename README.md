@@ -1,6 +1,8 @@
 # PDF-Jack
 
-## Projeto CLI para trabalhar com pdfs de maneira optmizada, salvando tempo em relação a programas com interface gráfica.
+## Desenvolvido para linux
+
+## Projeto CLI para trabalhar com pdfs de maneira optmizada no linux, salvando tempo em relação a programas com interface gráfica.
 
 ## Instalação:
     1. Clone o repositório: git clone git@github.com:hugovallada/pdf-jack.git.

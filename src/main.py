@@ -9,6 +9,8 @@ from PyPDF2 import PdfFileMerger
 
 app = typer.Typer()
 ISSUE = "https://github.com/hugovallada/pdf-jack/issues"
+#TODO: Modificar o LOGDIR para ir até a pasta pdf-jack/logs
+LOGDIR = Path.joinpath(Path('.').home(), '.local/share/')
 
 @app.command()
 def merge(
@@ -36,6 +38,8 @@ def merge(
     try:
         path = Path(path)
         merger = PdfFileMerger()
+        #TODO: Remover ValueError
+        raise ValueError
         if extract:
             if not path.exists():
                 raise FileNotFoundError
@@ -63,7 +67,14 @@ def merge(
     except (FileNotFoundError, NotADirectoryError) as err:
         typer.echo("Não foi possível encontrar o caminho passado, verifique se não houve nenhum erro.")
     except Exception:
+        #TODO: Criar função de logger
         typer.echo(f"Algo aconteceu, contate o desenvolvedor: {ISSUE}")
+        if Path(LOGDIR).exists():
+            typer.echo("Existe")
+            typer.echo(LOGDIR)
+        else:
+            print(Path(LOGDIR).resolve())
+            typer.echo("Não existe")
 
 
 if __name__ == "__main__":
