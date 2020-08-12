@@ -5,12 +5,13 @@ from typing import Optional
 import os
 import typer
 from PyPDF2 import PdfFileMerger
+from helpers import create_log
 
 
 app = typer.Typer()
 ISSUE = "https://github.com/hugovallada/pdf-jack/issues"
-#TODO: Modificar o LOGDIR para ir até a pasta pdf-jack/logs
-LOGDIR = Path.joinpath(Path('.').home(), '.local/share/')
+LOGDIR = Path.joinpath(Path(".").home(), ".local/share/pdf-jack")
+
 
 @app.command()
 def merge(
@@ -38,18 +39,20 @@ def merge(
     try:
         path = Path(path)
         merger = PdfFileMerger()
-        #TODO: Remover ValueError
-        raise ValueError
         if extract:
             if not path.exists():
                 raise FileNotFoundError
-            if extract_to == '':
+            if extract_to == "":
                 os.chdir(path.parent)
-                os.system(f'unzip {path}')
+                os.system(f"unzip {path}")
             else:
                 os.chdir(extract_to)
-                os.system(f'unzip {path}')
-            path = Path(str(path).replace(".zip","")) if extract_to == '' else Path(f'{extract_to}/{str(path.name).replace(".zip","")}')
+                os.system(f"unzip {path}")
+            path = (
+                Path(str(path).replace(".zip", ""))
+                if extract_to == ""
+                else Path(f'{extract_to}/{str(path.name).replace(".zip","")}')
+            )
         for document in path.iterdir():
             if document.is_file() and document.suffix == ".pdf":
                 if "merged" in document.name:
@@ -65,16 +68,24 @@ def merge(
             os.chdir(path)
             os.system("xdg-open . &")
     except (FileNotFoundError, NotADirectoryError) as err:
-        typer.echo("Não foi possível encontrar o caminho passado, verifique se não houve nenhum erro.")
-    except Exception:
-        #TODO: Criar função de logger
-        typer.echo(f"Algo aconteceu, contate o desenvolvedor: {ISSUE}")
+        typer.echo(
+            "Não foi possível encontrar o caminho passado, verifique se não houve nenhum erro."
+        )
+    except Exception as err:
         if Path(LOGDIR).exists():
-            typer.echo("Existe")
-            typer.echo(LOGDIR)
+            os.chdir(LOGDIR)
+            create_log(err)
         else:
-            print(Path(LOGDIR).resolve())
-            typer.echo("Não existe")
+            os.mkdir(LOGDIR)
+            os.chdir(LOGDIR)
+            create_log(err)
+
+        typer.echo(
+            f"Um erro fatal aconteceu. O log de erro está disponível em {Path.joinpath(LOGDIR, 'pdf-jack.log')}"
+        )
+        typer.echo(
+            f"Se precisar de ajuda, contate o desenvolverdor em {ISSUE} e envie o log com o erro"
+        )
 
 
 if __name__ == "__main__":
