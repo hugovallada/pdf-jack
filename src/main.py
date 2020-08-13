@@ -5,6 +5,7 @@ from typing import Optional
 import os
 import typer
 from PyPDF2 import PdfFileMerger
+from helpers import check_dir
 
 
 app = typer.Typer()
@@ -45,7 +46,10 @@ def merge(
             else:
                 os.chdir(extract_to)
                 os.system(f'unzip {path}')
-            path = Path(str(path).replace(".zip","")) if extract_to == '' else Path(f'{extract_to}/{str(path.name).replace(".zip","")}')
+            if Path(str(path).replace(".zip","")).exists() or Path(f'{extract_to}/{str(path.name).replace(".zip","")}').exists():
+                path = Path(str(path).replace(".zip","")) if extract_to == '' else Path(f'{extract_to}/{str(path.name).replace(".zip","")}') 
+            else:
+                path = check_dir(path, extract_to)     
         for document in path.iterdir():
             if document.is_file() and document.suffix == ".pdf":
                 if "merged" in document.name:
@@ -62,6 +66,7 @@ def merge(
             os.system("xdg-open . &")
     except (FileNotFoundError, NotADirectoryError) as err:
         typer.echo("Não foi possível encontrar o caminho passado, verifique se não houve nenhum erro.")
+        typer.echo(err)
     except Exception:
         typer.echo(f"Algo aconteceu, contate o desenvolvedor: {ISSUE}")
 
