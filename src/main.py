@@ -67,10 +67,8 @@ def merge(
         if manager:
             os.chdir(path)
             os.system("xdg-open . &")
-    except (FileNotFoundError, NotADirectoryError) as err:
-        typer.echo(
-            "Não foi possível encontrar o caminho passado, verifique se não houve nenhum erro."
-        )
+    except (FileNotFoundError, NotADirectoryError):
+        typer.echo("Não foi possível encontrar o caminho passado, verifique se não houve nenhum erro.")
     except Exception as err:
         if Path(LOGDIR).exists():
             os.chdir(LOGDIR)

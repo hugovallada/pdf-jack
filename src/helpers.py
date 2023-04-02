@@ -5,8 +5,7 @@ from pathlib import Path
 
 
 def get_time():
-    date_time = datetime.now()
-    date_time = date_time.strftime(f"%d/%m/%Y %H:%M:%S")
+    date_time = datetime.now().strftime(f"%d/%m/%Y %H:%M:%S")
     return date_time
 
 
